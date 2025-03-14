@@ -1,0 +1,14 @@
+# Prisma Turbo Migration Utility
+
+Makes it easier to apply prisma migrations to turso databases, eliminating the need to manually copy the migration file name for the turso cli command.
+
+This project is going to be published to github.com as an open source project open to the public.
+
+## General Rules:
+
+- first line of each file should be a comment containing the file's path and name
+    - e.g. // src/copy-migration.ts
+- use es6 arrow functions
+- write clean, modular code that does not need to be refactored
+- always use path alias for imports ('@') where applicable
+    - e.g. import { getConfig } from '@/config'

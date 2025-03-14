@@ -1,0 +1,5 @@
+{
+  "dbName": "your-turso-db-name",
+  "autoConfirm": false,
+  "migrationsDir": "prisma/migrations"
+}

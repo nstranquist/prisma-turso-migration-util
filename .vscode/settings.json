@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": false,
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.eslint.fix": "explicit"
+    }
+  },
+  "files.associations": {
+    "**/.cursorrules": "markdown"
+  }
+}

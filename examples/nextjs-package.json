@@ -1,0 +1,8 @@
+{
+  "name": "your-nextjs-project",
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "cd bin/migration-util && pnpm run build && node dist/index.js <db-name> $PNPM_SCRIPT_ARGS",
+    "migration:dev": "cd bin/migration-util && pnpm run dev -- $PNPM_SCRIPT_ARGS"
+  }
+}

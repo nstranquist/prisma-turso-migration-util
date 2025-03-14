@@ -1,0 +1,59 @@
+# .gitignore
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+bun.lockb
+bun.lock
+
+# Build outputs
+dist/
+build/
+lib/
+out/
+
+# Environment variables
+.env*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# IDE and editor files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Prisma
+prisma/*.db
+prisma/migrations/*_*
+prisma/dev.db
+prisma/dev.db-journal
+
+# Testing
+coverage/
+.nyc_output/
+
+# Turso
+.turso/
+
+# Misc
+.cache/
+.temp/
+tmp/
+temp/

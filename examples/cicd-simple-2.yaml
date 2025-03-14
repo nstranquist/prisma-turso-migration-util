@@ -1,0 +1,9 @@
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with: { version: 10 }
+      - run: cd bin/migration-util && pnpm install && pnpm run build
+      - run: cd bin/migration-util && node dist/copy-migration.js my-turso-db --auto
