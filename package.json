@@ -4,6 +4,7 @@
   "description": "TypeScript utility for Prisma and Turso migrations in Next.js",
   "author": "nstranquist (https://github.com/nstranquist)",
   "license": "MIT",
+  "type": "module",
   "bin": {
     "copy-migration": "./dist/index.js"
   },

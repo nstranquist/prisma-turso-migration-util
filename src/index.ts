@@ -2,31 +2,31 @@
 
 // src/index.ts
 
-import path from "path";
 import { handleLatestMigration } from "@/copy-migration";
-
-// utils could be useful here for:
-// - getting config
-// - getting db name from args
-// - getting migrations dir from args
-// - getting auto confirm from args
-// - getting db name from config
-// - getting migrations dir from config
+import { resolveMigrationsPath } from "@/utils/path-utils";
+import { getConfig } from "@/config";
+import { CLI_FLAGS } from "@/config/constants";
 
 async function main() {
+  const config = getConfig();
   const args = process.argv.slice(2);
+  
+  // Get database name from args or config
   const dbNameFromArgs = args.find((arg) => !arg.startsWith("-"));
-  const dbName = dbNameFromArgs || "image-resizer";
-  const autoConfirm = args.includes("--auto") || args.includes("-a");
+  const dbName = dbNameFromArgs || config.dbName;
+  
+  // Get auto-confirm flag from args or config
+  const autoConfirm = args.some(arg => CLI_FLAGS.AUTO.includes(arg as any)) || config.autoConfirm;
+  
+  // Get migrations directory from args
   const migrationsDirArg = args
-    .find((arg) => arg.startsWith("--migrations-dir="))
+    .find((arg) => arg.startsWith(CLI_FLAGS.MIGRATIONS_DIR))
     ?.split("=")[1];
 
-  const rootDir = path.resolve(__dirname, "..", "..", "..");
-  const migrationsDir =
-    migrationsDirArg || path.join(rootDir, "prisma", "migrations");
+  // Use the resolveMigrationsPath utility to find the migrations directory
+  const migrationsDir = await resolveMigrationsPath(migrationsDirArg);
 
-  console.log({ dbName, autoConfirm, migrationsDirArg });
+  console.log({ dbName, autoConfirm, migrationsDir });
   await handleLatestMigration({ migrationsDir, dbName, autoConfirm });
 }
 

@@ -10,6 +10,7 @@ I made this pretty quick for myself, and thought it'd be nice to polish it a bit
 - Provides options to copy the migration path or execute it directly with Turso
 - Configurable via command-line arguments or configuration files
 - Easy integration with Next.js projects and CI/CD pipelines
+- Smart path resolution for finding migrations in various project structures
 
 ## 📦 Installation
 
@@ -105,6 +106,15 @@ PORT=3000
    - Automatically execute the migration using the Turso CLI
    - Skip the migration
 
+### Migration Path Resolution
+
+The utility is smart about finding your migrations directory:
+
+1. It first checks for a custom path provided via the `--migrations-dir` flag
+2. If not found, it looks for a standard Prisma migrations directory in your project
+3. If running as a package inside another project, it looks for migrations in the parent project
+4. For testing purposes, it can use mock migrations included in the package
+
 ## 🛠️ Development
 
 ```bash
@@ -124,6 +134,10 @@ pnpm build
 # Run tests
 pnpm test
 ```
+
+### Testing
+
+The package includes mock migrations for testing purposes. These are located in the `test/fixtures/migrations` directory and are used when running tests or when no real migrations directory can be found.
 
 ## 📄 License
 

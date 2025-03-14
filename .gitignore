@@ -45,6 +45,9 @@ prisma/migrations/*_*
 prisma/dev.db
 prisma/dev.db-journal
 
+# But keep test fixtures
+!test/fixtures/migrations/*_*
+
 # Testing
 coverage/
 .nyc_output/

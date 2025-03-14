@@ -2,7 +2,10 @@
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import fs from "fs/promises";
+import path from "path";
 import { handleLatestMigration } from "@/copy-migration";
+import { getMockMigrationsPath } from "@/utils/path-utils";
+import { getConfig } from "@/config/config";
 
 // Define a minimal Dirent-like type for our use case
 interface MockDirent {
@@ -18,12 +21,17 @@ interface MockDirent {
   parentPath: string;
 }
 
+// get db name from config
+const config = getConfig();
+
 const migrationFileName = "20250314170214_init";
+const migrationLockFileName = "migration_lock.toml";
+const migrationSqlFileName = "migration.sql";
 
-const mockMigrationsPath = "/mock/path";
+// Use the actual mock migrations path from our test fixtures
+const mockMigrationsPath = getMockMigrationsPath();
 
-// todo is this dbName mocked or real?
-const dbName = "image-resizer";
+const dbName = config.dbName;
 
 // Mock dependencies globally
 vi.mock("fs/promises", () => ({
@@ -61,11 +69,11 @@ describe("handleLatestMigration", () => {
         isFIFO: () => false,
         isSocket: () => false,
         isSymbolicLink: () => false,
-        path: `${mockMigrationsPath}/${migrationFileName}`,
+        path: path.join(mockMigrationsPath, migrationFileName),
         parentPath: mockMigrationsPath,
       } as MockDirent,
       {
-        name: "migration_lock.toml",
+        name: migrationLockFileName,
         isDirectory: () => false,
         isFile: () => true,
         isBlockDevice: () => false,
@@ -73,7 +81,7 @@ describe("handleLatestMigration", () => {
         isFIFO: () => false,
         isSocket: () => false,
         isSymbolicLink: () => false,
-        path: `${mockMigrationsPath}/migration_lock.toml`,
+        path: path.join(mockMigrationsPath, migrationLockFileName),
         parentPath: mockMigrationsPath,
       } as MockDirent,
     ]);
@@ -95,11 +103,11 @@ describe("handleLatestMigration", () => {
       "Found directories:",
       expect.arrayContaining([
         { name: migrationFileName, isDir: true },
-        { name: "migration_lock.toml", isDir: false },
+        { name: migrationLockFileName, isDir: false },
       ])
     );
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      `✅ Migration path: ${mockMigrationsPath}/${migrationFileName}/migration.sql`
+      `✅ Migration path: ${path.join(mockMigrationsPath, migrationFileName, migrationSqlFileName)}`
     );
     consoleLogSpy.mockRestore();
   });
@@ -127,11 +135,11 @@ describe("handleLatestMigration", () => {
       "Found directories:",
       expect.arrayContaining([
         { name: migrationFileName, isDir: true },
-        { name: "migration_lock.toml", isDir: false },
+        { name: migrationLockFileName, isDir: false },
       ])
     );
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Executing: turso db shell ${dbName} < ${mockMigrationsPath}/${migrationFileName}/migration.sql`
+      `Executing: cat ${path.join(mockMigrationsPath, migrationFileName, migrationSqlFileName)} | turso db shell ${dbName}`
     );
 
     consoleLogSpy.mockRestore();
